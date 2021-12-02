@@ -3,9 +3,6 @@ const Logs = require('./schemas/logs');
 // Joi
 const Joi = require('joi');
 
-// Error creator
-const ErrorCreator = require('../middlewares/errorHandler/errorCreator');
-
 function validateLogInput(data) {
   const logSchema = {
     timestamp: Joi.date().required(),
@@ -13,6 +10,9 @@ function validateLogInput(data) {
     user: Joi.string().min(0).allow(null).required(),
     message: Joi.string().required(),
     stack: Joi.string(),
+    query: Joi.object(),
+    params: Joi.object(),
+    body: Joi.object(),
   };
   return Joi.attempt(data, Joi.object().keys(logSchema), 'Invalid log input');
 }

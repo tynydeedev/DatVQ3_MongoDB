@@ -25,7 +25,7 @@ module.exports = class Logger {
     }).catch(err => console.error(err));
   }
 
-  static info(message, user) {
+  static info(message, user, query, params, body) {
     const timestamp = new Date();
     const level = 'info';
     createLog({
@@ -33,6 +33,9 @@ module.exports = class Logger {
       level,
       user: user || 'unknown',
       message: message,
+      query,
+      params,
+      body,
     }).catch(err => console.error(err));
   }
 };

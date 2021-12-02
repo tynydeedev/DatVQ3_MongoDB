@@ -11,7 +11,7 @@ const connectOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   logger: console.log,
-  loggerLevel: 'info',
+  loggerLevel: 'debug',
 };
 
 mongoose.connect(process.env['MONGO_URI'], connectOptions).catch(error => {

@@ -16,10 +16,9 @@ router.post(
   '/register',
   validateRegisterUser,
   errorWrapper(async (req, res, next) => {
-    const { username } = req.body;
-
     const result = await createUser(req.body);
 
+    logger.info(`User ${user.username} has been create`);
     return res.send(result);
   })
 );
@@ -29,9 +28,7 @@ router.post(
   errorWrapper(async (req, res, next) => {
     const { username, password } = req.body;
 
-    if (!username || !password) {
-      throw new ErrorCreator('Missing credential(s)', 400);
-    }
+    if (!username || !password) throw new ErrorCreator('Missing credential(s)', 400);
 
     const result = await login(req.body);
 

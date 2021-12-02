@@ -11,6 +11,9 @@ const logSchema = new Schema({
   user: { type: String, required: true },
   message: { type: String, required: true },
   stack: { type: String },
+  query: { type: Object },
+  params: { type: Object },
+  body: { type: Object },
 });
 
 const Logs = mongoose.model('Logs', logSchema);

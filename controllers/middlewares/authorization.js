@@ -20,19 +20,24 @@ module.exports = function auth(roles) {
     }
 
     if (!data.jobTitle) {
-      logger.warn(`Unknown user sent a ${req.method} request to ${req.originalUrl}`, data.username);
+      logger.warn(`JWT token does not contain 'jobTitle'`, data.username);
       throw new ErrorCreator('Unauthorized', 401);
     }
 
     if (roles.includes(data.jobTitle)) {
+      const { query, params, body } = req;
+      logger.info(
+        `${data.jobTitle} id ${data._id} sent a ${req.method} request to ${req.originalUrl}`,
+        data.username,
+        query,
+        params,
+        body
+      );
       res.locals.tokenData = data;
       return next();
     }
 
-    logger.warn(
-      `${data.jobTitle} number ${data._id} sent a ${req.method} request to ${req.originalUrl}`,
-      data.username
-    );
+    logger.warn(`${data.jobTitle} id ${data._id} sent a ${req.method} request to ${req.originalUrl}`, data.username);
     throw new ErrorCreator('Forbidden', 403);
   };
 };

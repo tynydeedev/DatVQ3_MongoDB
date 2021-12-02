@@ -54,7 +54,7 @@ router
     autho(['President', 'Manager', 'Leader']),
     errorWrapper(async (req, res, next) => {
       const employeeNumber = +req.params.employeeNumber;
-      const result = await getEmployeeByNumber(employeeNumber);
+      const result = await getEmployeeById(employeeNumber);
       return res.send(result);
     })
   )
