@@ -7,12 +7,15 @@ const config = {
 
 function changeLogLevel(level) {
   config.logLevel = level;
-  fs.writeFileSync(path.join(process.cwd(), 'controllers', 'config', 'config.json'), JSON.stringify(config, null, 2));
+  fs.writeFileSync(
+    path.join(process.cwd(), 'controllers', 'config', 'logConfig.json'),
+    JSON.stringify(config, null, 2)
+  );
   return 'success';
 }
 
 function getLogLevel() {
-  const data = fs.readFileSync(path.join(process.cwd(), 'controllers', 'config', 'config.json'));
+  const data = fs.readFileSync(path.join(process.cwd(), 'controllers', 'config', 'logConfig.json'));
   const configData = JSON.parse(data);
   config.logLevel = configData.logLevel;
 }
