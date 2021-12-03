@@ -7,7 +7,7 @@ const config = {
 
 function changeLogLevel(level) {
   config.logLevel = level;
-  fs.writeFileSync(path.join(process.cwd(), 'controllers', 'config', 'config.json'), JSON.stringify(config));
+  fs.writeFileSync(path.join(process.cwd(), 'controllers', 'config', 'config.json'), JSON.stringify(config, null, 2));
   return 'success';
 }
 
