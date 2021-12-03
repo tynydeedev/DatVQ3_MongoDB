@@ -2,13 +2,14 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const logSchema = new Schema({
-  timestamp: { type: Date, required: true, default: new Date() },
+  requestId: { type: String, required: true, unique: true },
+  timestamp: { type: Date, required: true, default: Date.now },
   level: {
     type: String,
-    enum: ['info', 'warn', 'error'],
+    enum: ['info', 'warn', 'error', 'system'],
     required: true,
   },
-  user: { type: String, required: true },
+  username: { type: String, required: true },
   message: { type: String, required: true },
   stack: { type: String },
   query: { type: Object },

@@ -1,23 +1,8 @@
 const Logs = require('./schemas/logs');
 
-// Joi
-const Joi = require('joi');
+const { validateLogInput } = require('../middlewares/validators/logs');
 
-function validateLogInput(data) {
-  const logSchema = {
-    timestamp: Joi.date().required(),
-    level: Joi.string().valid('info', 'warn', 'error').required(),
-    user: Joi.string().min(0).allow(null).required(),
-    message: Joi.string().required(),
-    stack: Joi.string(),
-    query: Joi.object(),
-    params: Joi.object(),
-    body: Joi.object(),
-  };
-  return Joi.attempt(data, Joi.object().keys(logSchema), 'Invalid log input');
-}
-
-module.exports = async function (logData) {
+async function createLog(logData) {
   try {
     const validLogData = await validateLogInput(logData);
     await Logs.create(validLogData);
@@ -25,4 +10,14 @@ module.exports = async function (logData) {
     console.log('Error @createLog', error);
     throw error;
   }
-};
+}
+
+async function getLog(requirements) {
+  const fromTime = requirements.fromTime || new Date(0);
+  const toTime = requirements.toTime || new Date();
+
+  const result = await Logs.find({ ...requirements, timestamp: { $gt: fromTime, $lt: toTime } });
+  return result;
+}
+
+module.exports = { createLog, getLog };

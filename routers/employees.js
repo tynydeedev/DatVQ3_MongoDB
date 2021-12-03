@@ -19,7 +19,7 @@ const {
 // Other utils
 const ErrorCreator = require('../controllers/middlewares/errorHandler/errorCreator');
 const { errorWrapper } = require('../controllers/middlewares/errorHandler/errorHandler');
-const logger = require('../controllers/utils/logger');
+const logger = require('../controllers/middlewares/logger/logger');
 
 router
   .route('/')
@@ -27,6 +27,11 @@ router
     autho(['President', 'Manager', 'Leader']),
     errorWrapper(async (req, res, next) => {
       const result = await getAllEmployees();
+
+      const requestId = res.locals.requestId;
+      const { username } = res.locals.tokenData;
+      logger.info(requestId, `${req.method} - ${req.originalUrl} - success`, username);
+
       return res.send(result);
     })
   )
@@ -35,6 +40,11 @@ router
     validateCreateEmployee,
     errorWrapper(async (req, res, next) => {
       const result = await createEmployee(req.body);
+
+      const requestId = res.locals.requestId;
+      const { username } = res.locals.tokenData;
+      logger.info(requestId, `${req.method} - ${req.originalUrl} - success`, username);
+
       res.send(result);
     })
   );
@@ -42,7 +52,8 @@ router
 // Validation the parameter
 router.use('/:employeeNumber', (req, res, next) => {
   if (/[^0-9]/.test(req.params.employeeNumber)) {
-    logger.error('Invalid employeeNumber @/employees/:employeeNumber');
+    const requestId = res.locals.requestId;
+    logger.warn(requestId, 'Invalid employeeNumber @/employees/:employeeNumber');
     throw new ErrorCreator('Invalid employeeNumber', 400);
   }
   next();
@@ -55,6 +66,11 @@ router
     errorWrapper(async (req, res, next) => {
       const employeeNumber = +req.params.employeeNumber;
       const result = await getEmployeeById(employeeNumber);
+
+      const requestId = res.locals.requestId;
+      const { username } = res.locals.tokenData;
+      logger.info(requestId, `${req.method} - ${req.originalUrl} - success`, username);
+
       return res.send(result);
     })
   )
@@ -64,6 +80,11 @@ router
     errorWrapper(async (req, res, next) => {
       const employeeNumber = +req.params.employeeNumber;
       const result = await updateEmployee(employeeNumber, req.body);
+
+      const requestId = res.locals.requestId;
+      const { username } = res.locals.tokenData;
+      logger.info(requestId, `${req.method} - ${req.originalUrl} - success`, username);
+
       return res.send(result);
     })
   )
@@ -72,6 +93,11 @@ router
     errorWrapper(async (req, res, next) => {
       const employeeNumber = +req.params.employeeNumber;
       const result = await deleteEmployee(employeeNumber);
+
+      const requestId = res.locals.requestId;
+      const { username } = res.locals.tokenData;
+      logger.info(requestId, `${req.method} - ${req.originalUrl} - success`, username);
+
       return res.send(result);
     })
   );
