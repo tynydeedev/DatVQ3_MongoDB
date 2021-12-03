@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const config = {
-  logLevel: 'info',
+  logLevel: undefined,
 };
 
 function changeLogLevel(level) {
